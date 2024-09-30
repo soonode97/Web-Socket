@@ -3,7 +3,7 @@
  */
 
 import { v4 as uuidv4 } from 'uuid';
-import { handleDisconnect } from './helper.js';
+import { handleDisconnect, handleConnection, handlerEvent } from './helper.js';
 
 // 유저 관리 핸들러
 const registerHandler = (io) => {
@@ -15,8 +15,17 @@ const registerHandler = (io) => {
     const userUUID = uuidv4();
     addUser({ uuid: userUUID, socketId: socket.id });
 
+    handleConnection(socket, userUUID);
+    // 
+
+    /**
+     * 유저가 접속 중 발생하는 이벤트
+     * data에는 uuid, handleId, clientVersion 우리가 짜놨던 정보가 들어올 예정
+     */
+    socket.on('event', (data) => handlerEvent(io, socket, data));
+
     /** 유저 접속 해제 시 이벤트
-     *
+     *  유저를 소켓에서 제거해주는 로직
      * */
     socket.on('disconnect', (socket) => {
       handleDisconnect(socket, userUUID);

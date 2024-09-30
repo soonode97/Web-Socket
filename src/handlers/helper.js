@@ -1,9 +1,49 @@
-// 어떠한 특정 기능을 하지 않지만 필요한 도움을 주는 함수들
+// 어떠한 특정 기능을 하지 않지만 이벤트가 발생하면 필요한 도움을 주는 함수들
 
-import { getUser, removeUser } from "../models/user.model.js"
+import { CLIENT_VERSION } from '../constants.js';
+import { getStage, setStage } from '../models/stage.model.js';
+import { getUser, removeUser } from '../models/user.model.js';
+import handlerMaapings from './handlerMapping.js';
 
+// 유저가 접속을 해제했을 때 세팅할 함수
 export const handleDisconnect = (socket, uuid) => {
-    removeUser(socket.id);
-    console.log(`User Disconnected: ${socket.id}`);
-    console.log(`Current users: ${getUser()}`);
-}
+  removeUser(socket.id);
+  console.log(`User Disconnected: ${socket.id}`);
+  console.log(`Current users: ${getUser()}`);
+};
+
+// 유저가 접속했을 때 세팅을 도와주는 함수
+export const handleConnection = (socket, uuid) => {
+  console.log(`New user connected!: ${uuid} with socket ID ${socket.id}`);
+  console.log(`Current users: ${getUser()}`);
+
+  socket.emit(`connection ${{ uuid }}`);
+};
+
+// 핸들러 이벤트가 작동하면 발생할 함수
+export const handlerEvent = (io, socket, data) => {
+  // 클라이언트 버전 체크
+  if (!data.clientVersion) {
+    socket.emit('response', { status: 'fail', message: 'Client not found.' });
+  }
+
+  if (!CLIENT_VERSION.includes(data.clientVersion)) {
+    socket.emit('response', { status: 'fail', message: 'Client version mismatch.' });
+    return;
+  }
+
+  const handler = handlerMaapings[data.handlerId];
+
+  if (!handler) {
+    socket.emit('response', { status: 'fail', message: 'Handler not found.' });
+  }
+
+  const response = handler(data.userId, data.payload);
+
+  // 만약 서버에 연결된 모든 소켓(유저)에 응답을 해야하는 경우 broadcast를 사용한다.
+  if (response.broadcast) {
+    io.emit('response', 'broadcast');
+  }
+
+  socket.emit('response', response);
+};
