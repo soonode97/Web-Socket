@@ -1,7 +1,7 @@
 // 어떠한 특정 기능을 하지 않지만 이벤트가 발생하면 필요한 도움을 주는 함수들
 
 import { CLIENT_VERSION } from '../constants.js';
-import { getStage, setStage } from '../models/stage.model.js';
+import { createStage, getStage, setStage } from '../models/stage.model.js';
 import { getUser, removeUser } from '../models/user.model.js';
 import handlerMaapings from './handlerMapping.js';
 
@@ -17,7 +17,9 @@ export const handleConnection = (socket, uuid) => {
   console.log(`New user connected!: ${uuid} with socket ID ${socket.id}`);
   console.log(`Current users: ${getUser()}`);
 
-  socket.emit(`connection ${{ uuid }}`);
+  createStage(uuid);
+
+  socket.emit(`connection`, { uuid });
 };
 
 // 핸들러 이벤트가 작동하면 발생할 함수

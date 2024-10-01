@@ -11,7 +11,7 @@ export const addUser = (user) => {
 };
 
 export const getUser = () => {
-  return users;
+  return JSON.stringify(users);
 };
 
 export const removeUser = (socketId) => {

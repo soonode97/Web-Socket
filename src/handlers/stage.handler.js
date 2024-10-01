@@ -24,7 +24,7 @@ export const moveStageHandler = (uuid, payload) => {
   const currentStage = currentStages[currentStages.length - 1];
 
   // 클라이언트 vs 서버 비교
-  if (currentStage.Id !== payload.currentStage) {
+  if (currentStage.id !== payload.currentStage) {
     return { status: 'fail', message: 'Current Stage mismatch.' };
   }
 
@@ -36,7 +36,8 @@ export const moveStageHandler = (uuid, payload) => {
   // 1. 100 미만이거나 105초보다 큰 경우 fail
   // => 100 미만은 아직 2 스테이지에 도달할 점수가 되지 않았다고 판단
   // => 105 초과는 latency가 길어졌을 경우를 대비하여 fail처리
-  if (elapsedTime < 100 || elapsedTime > 105) {
+  // 스테이지마다 숫자를 다르게 설정하도록 만들어야함.
+  if (elapsedTime < 10 || elapsedTime > 10.5) {
     return { status: 'fail', message: 'Invalid elapsed time.' };
   }
 

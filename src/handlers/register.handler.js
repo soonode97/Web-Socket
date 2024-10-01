@@ -4,6 +4,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { handleDisconnect, handleConnection, handlerEvent } from './helper.js';
+import { addUser } from '../models/user.model.js';
 
 // 유저 관리 핸들러
 const registerHandler = (io) => {
@@ -16,7 +17,7 @@ const registerHandler = (io) => {
     addUser({ uuid: userUUID, socketId: socket.id });
 
     handleConnection(socket, userUUID);
-    // 
+    //
 
     /**
      * 유저가 접속 중 발생하는 이벤트

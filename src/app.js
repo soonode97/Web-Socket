@@ -11,15 +11,11 @@ const PORT = 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static('public'));
 initSocket(server);
-
-app.get('/', (req, res) => {
-  res.send('hello world');
-});
 
 server.listen(PORT, async () => {
   console.log(`Server is ruuning on port ${PORT}`);
-
 
   /** 유저관리
    * UUID : 유저의 식별자 + 접속한 기기 정보 등이 담겨있는 고유 번호 - 유저 특정 가능
