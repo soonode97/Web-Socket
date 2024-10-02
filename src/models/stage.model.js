@@ -7,7 +7,7 @@
 
 const stages = {};
 
-// 스테이지 초기화
+// 스테이지 정보를 담을 바구니 생성
 export const createStage = (uuid) => {
   stages[uuid] = [];
 };
@@ -20,6 +20,7 @@ export const setStage = (uuid, id, timestamp) => {
   return stages[uuid].push({ id, timestamp });
 };
 
+// 스테이지 초기화
 export const clearStage = (uuid) => {
   stages[uuid] = [];
 };
