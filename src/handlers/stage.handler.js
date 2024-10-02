@@ -37,7 +37,8 @@ export const moveStageHandler = (uuid, payload) => {
   // => 100 미만은 아직 2 스테이지에 도달할 점수가 되지 않았다고 판단
   // => 105 초과는 latency가 길어졌을 경우를 대비하여 fail처리
   // 스테이지마다 숫자를 다르게 설정하도록 만들어야함.
-  if (elapsedTime < 10 || elapsedTime > 10.5) {
+  // 데이터 모델의 Score를 가져오도록 할 예정
+  if (elapsedTime < currentStage.score || elapsedTime > currentStage.score + 5) {
     return { status: 'fail', message: 'Invalid elapsed time.' };
   }
 
@@ -49,8 +50,7 @@ export const moveStageHandler = (uuid, payload) => {
   }
 
   // 과제 : 클라이언트에서 받은 현재 점수가 targetStage의 요구 점수보다 높으면 setStage가 작동하도록 설정해주어야 한다.
-
   setStage(uuid, payload.targetStage, serverTime);
 
-  return { status: 'success' };
+  return { status: 'success', userStage: getStage(uuid) };
 };

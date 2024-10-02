@@ -1,9 +1,11 @@
 import { sendEvent } from './Socket.js';
+import assetData from './Assets.js';
 
 class Score {
   score = 0;
   HIGH_SCORE_KEY = 'highScore';
   stageChange = true;
+  currentStage = 0;
 
   constructor(ctx, scaleRatio) {
     this.ctx = ctx;
@@ -12,11 +14,24 @@ class Score {
   }
 
   update(deltaTime) {
-    this.score += deltaTime * 0.001;
-    // 점수가 100점 이상이 될 시 서버에 메세지 전송
-    if (Math.floor(this.score) === 10 && this.stageChange) {
+    // 초당 점수 획득
+    this.score += deltaTime * 0.001 * assetData.stage.data[this.currentStage].scorePerSecond;
+
+    // 만약 다음 스테이지 진입 점수에 도달하는 경우 서버에 메시지 전송 및 스테이지 이동
+    if (
+      this.stageChange &&
+      Math.floor(this.score) === assetData.stage.data[this.currentStage + 1].score
+    ) {
+      sendEvent(11, {
+        currentStage: assetData.stage.data[this.currentStage].id,
+        targetStage: assetData.stage.data[this.currentStage + 1].id,
+      });
+      this.currentStage++;
+    }
+
+    // 최종 스테이지인 경우 스테이지 이동을 못하도록 막음.
+    if (!assetData.stage.data[this.currentStage + 1]) {
       this.stageChange = false;
-      sendEvent(11, { currentStage: 1000, targetStage: 1001 });
     }
   }
 
@@ -26,6 +41,10 @@ class Score {
 
   reset() {
     this.score = 0;
+    // 스테이지 및 스테이지 별 점수 획득 초기화
+    this.currentStage = 0;
+    // 최종스테이지로 false 처리 된 경우 다시 true로 변경
+    this.stageChange = true;
   }
 
   setHighScore() {
