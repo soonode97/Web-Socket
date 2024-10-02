@@ -75,6 +75,10 @@ class Score {
     this.ctx.fillText(scorePadded, scoreX, y);
     this.ctx.fillText(`HI ${highScorePadded}`, highScoreX, y);
   }
+
+  getCurrentStageId() {
+    return assetData.stage.data[this.currentStage].id;
+  }
 }
 
 export default Score;
