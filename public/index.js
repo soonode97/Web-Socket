@@ -218,6 +218,8 @@ function gameLoop(currentTime) {
     score.setHighScore();
     setupGameReset();
   }
+
+  // 여기서 아이템 충돌감지가 이루어진다.
   const collideWithItem = itemController.collideWith(player);
   if (collideWithItem && collideWithItem.itemId) {
     score.getItem(collideWithItem.itemId);

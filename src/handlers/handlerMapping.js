@@ -7,7 +7,7 @@ import { gameStart, gameEnd } from './game.handler.js';
 import { getItemScoreHandler } from './item.handler.js';
 
 // 스테이지 이동 핸들러 매핑
-const handlerMaapings = {
+const handlerMappings = {
   2: gameStart,
   3: gameEnd,
   // 11번이라는 메세지가 들어오면 moveStageHandler가 작동하도록 함.
@@ -16,4 +16,4 @@ const handlerMaapings = {
   21: getItemScoreHandler,
 };
 
-export default handlerMaapings;
+export default handlerMappings;

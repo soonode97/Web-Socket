@@ -17,7 +17,6 @@ const registerHandler = (io) => {
     addUser({ uuid: userUUID, socketId: socket.id });
 
     handleConnection(socket, userUUID);
-    //
 
     /**
      * 유저가 접속 중 발생하는 이벤트
