@@ -8,9 +8,7 @@ export const isValidStage = (payload, currentStage) => {
   }
 };
 
-export const isValidItem = (payload, currentStage) => {
-  const { item_unlocks } = getGameAssets();
-  const index = item_unlocks.data.findIndex((e) => e.stage_id === currentStage.id);
+export const isValidItem = (payload, item_unlocks, index) => {
   if (!index) {
     return { status: 'fail', message: 'Stage not found.' };
   }

@@ -20,11 +20,13 @@ class Score {
     // 만약 다음 스테이지 진입 점수에 도달하는 경우 서버에 메시지 전송 및 스테이지 이동
     if (
       this.stageChange &&
-      Math.floor(this.score) === assetData.stage.data[this.currentStage + 1].score
+      Math.floor(this.score) >= assetData.stage.data[this.currentStage + 1].score
     ) {
+      console.log('다음 스테이지 이동 보낸다!!');
       sendEvent(11, {
         currentStage: assetData.stage.data[this.currentStage].id,
         targetStage: assetData.stage.data[this.currentStage + 1].id,
+        currentScore: this.score,
       });
       this.currentStage++;
     }

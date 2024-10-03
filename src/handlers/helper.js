@@ -2,6 +2,7 @@
 
 import { CLIENT_VERSION } from '../constants.js';
 import { createStage, getStage, setStage } from '../models/stage.model.js';
+import { createItems } from '../models/item.model.js';
 import { getUser, removeUser } from '../models/user.model.js';
 import handlerMappings from './handlerMapping.js';
 
@@ -18,6 +19,7 @@ export const handleConnection = (socket, uuid) => {
   console.log(`Current users: ${getUser()}`);
 
   createStage(uuid);
+  createItems(uuid);
 
   socket.emit(`connection`, { uuid });
 };

@@ -13,8 +13,20 @@ export const getItemScoreHandler = (uuid, payload) => {
   // 스테이지 유효성 검증
   isValidStage(payload, currentStage);
 
-  // 아이템 검증 로직
-  isValidItem(payload, currentStage);
+  const { items, item_unlocks } = getGameAssets();
+  const index = item_unlocks.data.findIndex((e) => e.stage_id === currentStage.id);
 
-  return { status: 'success' };
+  // 아이템 검증 로직
+  isValidItem(payload, item_unlocks, index);
+
+  const item = items.data.find((e) => e.id === payload.itemId);
+  if (!item) {
+    return { status: 'fail', message: 'Not found for Items.' };
+  }
+
+  const serverTime = Date.now();
+
+  setItem(uuid, item.id, item.score, currentStage.id, serverTime);
+
+  return { status: 'success', message: `${item.id} 아이템 획득!!` };
 };
