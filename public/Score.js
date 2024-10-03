@@ -35,8 +35,15 @@ class Score {
     }
   }
 
+  // 아이템을 획득할 때, 패킷을 보내고 현재 점수를 아이템 스코어만큼 증가시키도록 한다.
   getItem(itemId) {
-    this.score += 0;
+    const getItem = assetData.item.data.find((e) => e.id === itemId);
+    sendEvent(21, {
+      currentStage: assetData.stage.data[this.currentStage].id,
+      itemId: itemId,
+      score: getItem.score,
+    });
+    this.score += getItem.score;
   }
 
   reset() {
