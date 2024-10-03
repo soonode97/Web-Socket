@@ -41,7 +41,7 @@ class ItemController {
 
     // Index를 가지고 아이템을 지정하고 해당 아이템의 실제 id값을 itemInfo에 저장하도록 함
     const itemInfo = this.itemImages[items[index] - 1];
-    console.log(itemInfo);
+    // console.log(itemInfo);
     const x = this.canvas.width * 1.5;
     const y = this.getRandomNumber(10, this.canvas.height - itemInfo.height);
 

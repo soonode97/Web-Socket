@@ -5,28 +5,19 @@
  * 유저는 일정 점수가 되면 다음 스테이지로 이동한다.
  */
 
-import { getStage, setStage } from '../models/stage.model.js';
+import { getStage, setStage, getCurrentStage } from '../models/stage.model.js';
 import { getGameAssets } from '../init/assets.js';
+import { isValidStage } from '../services/validation.js';
 
 // 스테이지 이동 핸들러
 export const moveStageHandler = (uuid, payload) => {
   // 유저의 현재 스테이지 currentStage, 다음 스테이지 targetStage가 있고
   // 검증 절차를 통해 진행된다.
 
-  // 유저의 현재 스테이지 정보 불러오기
-  let currentStages = getStage(uuid);
-  if (!currentStages.length) {
-    return { status: 'fail', message: 'No stages found for user.' };
-  }
-
-  // 오름차순 -> 가장 큰 스테이지 ID를 확인 -> 유저의 현재 스테이지다
-  currentStages.sort((a, b) => a.id - b.id);
-  const currentStage = currentStages[currentStages.length - 1];
+  const currentStage = getCurrentStage(uuid);
 
   // 클라이언트 vs 서버 비교
-  if (currentStage.id !== payload.currentStage) {
-    return { status: 'fail', message: 'Current Stage mismatch.' };
-  }
+  isValidStage(payload, currentStage);
 
   // 점수 검증 로직
   const serverTime = Date.now(); // 현재 타임스탬프

@@ -3,7 +3,7 @@
 import { CLIENT_VERSION } from '../constants.js';
 import { createStage, getStage, setStage } from '../models/stage.model.js';
 import { getUser, removeUser } from '../models/user.model.js';
-import handlerMaapings from './handlerMapping.js';
+import handlerMappings from './handlerMapping.js';
 
 // 유저가 접속을 해제했을 때 세팅할 함수
 export const handleDisconnect = (socket, uuid) => {
@@ -34,7 +34,7 @@ export const handlerEvent = (io, socket, data) => {
     return;
   }
 
-  const handler = handlerMaapings[data.handlerId];
+  const handler = handlerMappings[data.handlerId];
 
   if (!handler) {
     socket.emit('response', { status: 'fail', message: 'Handler not found.' });
@@ -43,9 +43,9 @@ export const handlerEvent = (io, socket, data) => {
   const response = handler(data.userId, data.payload);
 
   // 만약 서버에 연결된 모든 소켓(유저)에 응답을 해야하는 경우 broadcast를 사용한다.
-  if (response.broadcast) {
-    io.emit('response', 'broadcast');
-  }
+  // if (response.broadcast) {
+  //   io.emit('response', 'broadcast');
+  // }
 
   socket.emit('response', response);
 };
