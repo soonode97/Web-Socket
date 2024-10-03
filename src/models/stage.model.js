@@ -7,7 +7,7 @@
 
 const stages = {};
 
-// 스테이지 초기화
+// 스테이지 정보를 담을 바구니 생성
 export const createStage = (uuid) => {
   stages[uuid] = [];
 };
@@ -20,6 +20,20 @@ export const setStage = (uuid, id, timestamp) => {
   return stages[uuid].push({ id, timestamp });
 };
 
+// 스테이지 초기화
 export const clearStage = (uuid) => {
   stages[uuid] = [];
+};
+
+export const getCurrentStage = (uuid) => {
+  // 유저의 현재 스테이지 정보 불러오기
+  let currentStages = getStage(uuid);
+  if (!currentStages.length) {
+    return { status: 'fail', message: 'No stages found for user.' };
+  }
+
+  // 오름차순 -> 가장 큰 스테이지 ID를 확인 -> 유저의 현재 스테이지다
+  currentStages.sort((a, b) => a.id - b.id);
+  const currentStage = currentStages[currentStages.length - 1];
+  return currentStage;
 };

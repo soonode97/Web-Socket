@@ -39,8 +39,10 @@ const CACTI_CONFIG = [
 const ITEM_CONFIG = [
   { width: 50 / 1.5, height: 50 / 1.5, id: 1, image: 'images/items/pokeball_red.png' },
   { width: 50 / 1.5, height: 50 / 1.5, id: 2, image: 'images/items/pokeball_yellow.png' },
-  { width: 50 / 1.5, height: 50 / 1.5, id: 3, image: 'images/items/pokeball_purple.png' },
-  { width: 50 / 1.5, height: 50 / 1.5, id: 4, image: 'images/items/pokeball_cyan.png' },
+  { width: 45 / 1.5, height: 45 / 1.5, id: 3, image: 'images/items/pokeball_purple.png' },
+  { width: 45 / 1.5, height: 45 / 1.5, id: 4, image: 'images/items/pokeball_cyan.png' },
+  { width: 35 / 1.5, height: 35 / 1.5, id: 5, image: 'images/items/pokeball_pink.png' },
+  { width: 35 / 1.5, height: 35 / 1.5, id: 6, image: 'images/items/pokeball_orange.png' },
 ];
 
 // 게임 요소들
@@ -203,7 +205,7 @@ function gameLoop(currentTime) {
     ground.update(gameSpeed, deltaTime);
     // 선인장
     cactiController.update(gameSpeed, deltaTime);
-    itemController.update(gameSpeed, deltaTime);
+    itemController.update(gameSpeed, deltaTime, score.getCurrentStageId());
     // 달리기
     player.update(gameSpeed, deltaTime);
     updateGameSpeed(deltaTime);
@@ -216,6 +218,8 @@ function gameLoop(currentTime) {
     score.setHighScore();
     setupGameReset();
   }
+
+  // 여기서 아이템 충돌감지가 이루어진다.
   const collideWithItem = itemController.collideWith(player);
   if (collideWithItem && collideWithItem.itemId) {
     score.getItem(collideWithItem.itemId);

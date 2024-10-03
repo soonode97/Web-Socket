@@ -8,7 +8,7 @@ let gameAssets = {};
 // import.meta.url => 현재 실행되는 곳의 절대경로를 말해줌
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename); // 현재 파일의 이름을 제외한 경로를 저장
-const basePath = path.join(__dirname, '../../assets'); // 현재 파일의 뒤로 2번 간 뒤 assets 폴더를 찾아준 것
+const basePath = path.join(__dirname, '../../public/assets'); // 현재 파일의 뒤로 2번 간 뒤 assets 폴더를 찾아준 것
 
 console.log(basePath);
 
@@ -20,7 +20,6 @@ const readFileAsync = (filename) => {
         reject(err);
         return;
       }
-      console.log(JSON.parse(data));
       resolve(JSON.parse(data));
     });
   });
