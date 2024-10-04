@@ -4,6 +4,7 @@ import assetData from './Assets.js';
 class Score {
   score = 0;
   HIGH_SCORE_KEY = 'highScore';
+  MY_TOP_SCORE_KEY = 'myTopScore';
   stageChange = true;
   currentStage = 0;
 
@@ -57,10 +58,31 @@ class Score {
   }
 
   setHighScore() {
-    const highScore = Number(localStorage.getItem(this.HIGH_SCORE_KEY));
-    if (this.score > highScore) {
-      localStorage.setItem(this.HIGH_SCORE_KEY, Math.floor(this.score));
+    // 여기서 최고 점수를 받고 갱신을 하고 있는 상태인데 로컬 스토리지에 담아서 쓰고있다.
+    // 로컬 스토리지가 아닌 rank 핸들러를 통해 최고점수를 세팅하고 보여주도록 하자.
+    const currentRankTopScore = localStorage.getItem(this.HIGH_SCORE_KEY);
+    if (currentRankTopScore < this.score || !currentRankTopScore) {
+      sendEvent(31, {
+        currentScore: Math.floor(this.score),
+      });
+
+      // if (topScore.status === 'success') {
+      //   localStorage.setItem(this.HIGH_SCORE_KEY, topScore.score);
+      // }
     }
+
+    // const highScore = Number(localStorage.getItem(this.HIGH_SCORE_KEY));
+    // if (this.score > highScore) {
+    //   localStorage.setItem(this.HIGH_SCORE_KEY, Math.floor(this.score));
+    // }
+  }
+
+  gameEnd() {
+    console.log('게임 기록 요청을 보냅니다...');
+    sendEvent(3, {
+      currentStage: assetData.stage.data[this.currentStage].id,
+      currentScore: Math.floor(this.score),
+    });
   }
 
   getScore() {
@@ -68,6 +90,7 @@ class Score {
   }
 
   draw() {
+    const myTopScore = Number(localStorage.getItem(this.MY_TOP_SCORE_KEY));
     const highScore = Number(localStorage.getItem(this.HIGH_SCORE_KEY));
     const y = 20 * this.scaleRatio;
 
@@ -75,14 +98,17 @@ class Score {
     this.ctx.font = `${fontSize}px serif`;
     this.ctx.fillStyle = '#525250';
 
+    const myTopScoreX = this.canvas.width - 775 * this.scaleRatio;
     const scoreX = this.canvas.width - 75 * this.scaleRatio;
-    const highScoreX = scoreX - 125 * this.scaleRatio;
+    const highScoreX = scoreX - 225 * this.scaleRatio;
 
+    const myTopScorePadded = myTopScore.toString().padStart(6, 0);
     const scorePadded = Math.floor(this.score).toString().padStart(6, 0);
     const highScorePadded = highScore.toString().padStart(6, 0);
 
+    this.ctx.fillText(`MY TOP SCORE : ${myTopScorePadded}`, myTopScoreX, y);
     this.ctx.fillText(scorePadded, scoreX, y);
-    this.ctx.fillText(`HI ${highScorePadded}`, highScoreX, y);
+    this.ctx.fillText(`TOP RANK :  ${highScorePadded}`, highScoreX, y);
   }
 
   getCurrentStageId() {

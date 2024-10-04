@@ -1,3 +1,6 @@
+import { isValidStage } from '../services/validation.js';
+import { getItemScoresEarnedByStage } from './item.model.js';
+
 /**
  * 스테이지마다 획득하는 점수에 대한 데이터 모델을 정의하기 위한 스크립트
  *
@@ -16,8 +19,8 @@ export const getStage = (uuid) => {
   return stages[uuid];
 };
 
-export const setStage = (uuid, id, timestamp) => {
-  return stages[uuid].push({ id, timestamp });
+export const setStage = (uuid, id, totalScore, timestamp) => {
+  return stages[uuid].push({ id, totalScore, timestamp });
 };
 
 // 스테이지 초기화
@@ -36,4 +39,22 @@ export const getCurrentStage = (uuid) => {
   currentStages.sort((a, b) => a.id - b.id);
   const currentStage = currentStages[currentStages.length - 1];
   return currentStage;
+};
+
+export const getCurrentStageScore = (uuid, stage, currentStage, serverTime) => {
+  // 현재 스테이지의 총 점수를 체크하는 로직
+  // 1. 스테이지가 이동될 때, 이동직전까지 걸린 시간을 계산 (elapsedTime)
+  // 2. 현재 스테이지에서 초당 얻을 수 있는 점수(curStageScorePerSec)를 위 elapsedTime 에 곱연산
+  // 3. 현재 스테이지에서 얻은 아이템 점수(curStageScoreFromItem)와 curStageScorePerSec 합연산
+  const elapsedTime = (serverTime - currentStage.timestamp) / 1000;
+  // console.log(elapsedTime);
+
+  const curStageScorePerSec = elapsedTime * stage.scorePerSecond;
+  console.log('curStageScorePerSec: ' + curStageScorePerSec);
+
+  const itemsScore = getItemScoresEarnedByStage(uuid, currentStage.id);
+  console.log('itemsScore: ' + itemsScore);
+
+  return curStageScorePerSec + itemsScore;
+  // console.log('totalScore: ' + totalScore);
 };
