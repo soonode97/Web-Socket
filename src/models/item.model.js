@@ -37,3 +37,14 @@ export const getItemScoresEarnedByStage = (uuid, currentStageId) => {
     return 0;
   }
 };
+
+export const getItemScoresEarnedByAllStages = (uuid) => {
+  const items = getItem(uuid);
+
+  if (items.length > 0) {
+    const result = items.reduce((p, n) => ({ score: p.score + n.score }));
+    return result.score;
+  } else {
+    return 0;
+  }
+};

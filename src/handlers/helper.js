@@ -5,9 +5,11 @@ import { createStage, getStage, setStage } from '../models/stage.model.js';
 import { createItems } from '../models/item.model.js';
 import { getUser, removeUser } from '../models/user.model.js';
 import handlerMappings from './handlerMapping.js';
+import { createGameRecords, clearRecords } from '../models/record.model.js';
 
 // 유저가 접속을 해제했을 때 세팅할 함수
 export const handleDisconnect = (socket, uuid) => {
+  clearRecords(uuid);
   removeUser(socket.id);
   console.log(`User Disconnected: ${socket.id}`);
   console.log(`Current users: ${getUser()}`);
@@ -18,6 +20,7 @@ export const handleConnection = (socket, uuid) => {
   console.log(`New user connected!: ${uuid} with socket ID ${socket.id}`);
   console.log(`Current users: ${getUser()}`);
 
+  createGameRecords(uuid);
   createStage(uuid);
   createItems(uuid);
 
@@ -45,9 +48,10 @@ export const handlerEvent = (io, socket, data) => {
   const response = handler(data.userId, data.payload);
 
   // 만약 서버에 연결된 모든 소켓(유저)에 응답을 해야하는 경우 broadcast를 사용한다.
-  // if (response.broadcast) {
-  //   io.emit('response', 'broadcast');
-  // }
+  if (response.type === 'broadcast') {
+    io.emit('response', response);
+    return;
+  }
 
   socket.emit('response', response);
 };
