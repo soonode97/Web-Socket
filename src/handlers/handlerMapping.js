@@ -5,6 +5,7 @@
 import { moveStageHandler } from './stage.handler.js';
 import { gameStart, gameEnd } from './game.handler.js';
 import { getItemScoreHandler } from './item.handler.js';
+import { updateRankingHandler } from './rank.hanlder.js';
 
 // 스테이지 이동 핸들러 매핑
 const handlerMappings = {
@@ -14,6 +15,7 @@ const handlerMappings = {
   // 절대 괄호를 붙이지 말 것. 괄호를 붙이면 실행된 결과가 담겨있기 때문
   11: moveStageHandler,
   21: getItemScoreHandler,
+  31: updateRankingHandler,
 };
 
 export default handlerMappings;

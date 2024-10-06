@@ -1,9 +1,11 @@
 import { sendEvent } from './Socket.js';
 import assetData from './Assets.js';
+import my_key from './config.js';
 
 class Score {
   score = 0;
   HIGH_SCORE_KEY = 'highScore';
+  MY_TOP_SCORE_KEY = 'myTopScore';
   stageChange = true;
   currentStage = 0;
 
@@ -56,11 +58,14 @@ class Score {
     this.stageChange = true;
   }
 
-  setHighScore() {
-    const highScore = Number(localStorage.getItem(this.HIGH_SCORE_KEY));
-    if (this.score > highScore) {
-      localStorage.setItem(this.HIGH_SCORE_KEY, Math.floor(this.score));
-    }
+  gameEnd() {
+    console.log('게임 기록 요청을 보냅니다...');
+
+    // 게임 종료 및 게임 기록
+    sendEvent(3, {
+      currentStage: assetData.stage.data[this.currentStage].id,
+      currentScore: Math.floor(this.score),
+    });
   }
 
   getScore() {
@@ -68,21 +73,25 @@ class Score {
   }
 
   draw() {
-    const highScore = Number(localStorage.getItem(this.HIGH_SCORE_KEY));
+    const myTopScore = Number(localStorage.getItem(my_key.MY_TOP_SCORE_KEY));
+    const highScore = Number(localStorage.getItem(my_key.HIGH_SCORE_KEY));
     const y = 20 * this.scaleRatio;
 
     const fontSize = 20 * this.scaleRatio;
     this.ctx.font = `${fontSize}px serif`;
     this.ctx.fillStyle = '#525250';
 
+    const myTopScoreX = this.canvas.width - 775 * this.scaleRatio;
     const scoreX = this.canvas.width - 75 * this.scaleRatio;
-    const highScoreX = scoreX - 125 * this.scaleRatio;
+    const highScoreX = scoreX - 225 * this.scaleRatio;
 
+    const myTopScorePadded = myTopScore.toString().padStart(6, 0);
     const scorePadded = Math.floor(this.score).toString().padStart(6, 0);
     const highScorePadded = highScore.toString().padStart(6, 0);
 
+    this.ctx.fillText(`MY TOP SCORE : ${myTopScorePadded}`, myTopScoreX, y);
     this.ctx.fillText(scorePadded, scoreX, y);
-    this.ctx.fillText(`HI ${highScorePadded}`, highScoreX, y);
+    this.ctx.fillText(`TOP RANK :  ${highScorePadded}`, highScoreX, y);
   }
 
   getCurrentStageId() {
