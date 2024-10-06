@@ -1,5 +1,6 @@
 import { sendEvent } from './Socket.js';
 import assetData from './Assets.js';
+import my_key from './config.js';
 
 class Score {
   score = 0;
@@ -57,28 +58,10 @@ class Score {
     this.stageChange = true;
   }
 
-  setHighScore() {
-    // 여기서 최고 점수를 받고 갱신을 하고 있는 상태인데 로컬 스토리지에 담아서 쓰고있다.
-    // 로컬 스토리지가 아닌 rank 핸들러를 통해 최고점수를 세팅하고 보여주도록 하자.
-    const currentRankTopScore = localStorage.getItem(this.HIGH_SCORE_KEY);
-    if (currentRankTopScore < this.score || !currentRankTopScore) {
-      sendEvent(31, {
-        currentScore: Math.floor(this.score),
-      });
-
-      // if (topScore.status === 'success') {
-      //   localStorage.setItem(this.HIGH_SCORE_KEY, topScore.score);
-      // }
-    }
-
-    // const highScore = Number(localStorage.getItem(this.HIGH_SCORE_KEY));
-    // if (this.score > highScore) {
-    //   localStorage.setItem(this.HIGH_SCORE_KEY, Math.floor(this.score));
-    // }
-  }
-
   gameEnd() {
     console.log('게임 기록 요청을 보냅니다...');
+
+    // 게임 종료 및 게임 기록
     sendEvent(3, {
       currentStage: assetData.stage.data[this.currentStage].id,
       currentScore: Math.floor(this.score),
@@ -90,8 +73,8 @@ class Score {
   }
 
   draw() {
-    const myTopScore = Number(localStorage.getItem(this.MY_TOP_SCORE_KEY));
-    const highScore = Number(localStorage.getItem(this.HIGH_SCORE_KEY));
+    const myTopScore = Number(localStorage.getItem(my_key.MY_TOP_SCORE_KEY));
+    const highScore = Number(localStorage.getItem(my_key.HIGH_SCORE_KEY));
     const y = 20 * this.scaleRatio;
 
     const fontSize = 20 * this.scaleRatio;
