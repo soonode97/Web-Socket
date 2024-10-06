@@ -60,7 +60,6 @@ export const gameEnd = (uuid, payload) => {
   }
 
   setGameRecords(uuid, currentStage.id, payload.currentScore, serverTime);
-  console.log(getGameRecords(uuid));
 
   return {
     status: 'success',
