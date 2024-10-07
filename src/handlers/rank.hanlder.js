@@ -34,10 +34,30 @@ export const updateRankingHandler = (uuid, payload) => {
 };
 
 export const initHighScore = () => {
-  return {
-    status: 'success',
-    type: 'broadcast',
-    message: '최고랭킹초기화',
-    topRankScore: 0,
-  };
+  const rankList = getRankList();
+  console.log(rankList);
+  if (rankList.length > 0) {
+    console.log(`새로운 유저에게 랭킹 갱신중...`);
+    return {
+      status: 'success',
+      type: 'unicast',
+      message: '접속하여 현재 랭킹 갱신중..',
+      topRankScore: rankList[0].score,
+    };
+  }
+};
+
+export const welcomeTopPlayerMessage = (uuid) => {
+  const rankList = getRankList();
+  if (rankList.length > 0) {
+    if (rankList[0].uuid === uuid) {
+      console.log(`랭킹 1등 ${uuid} 님이 접속하였습니다!`);
+      return {
+        status: 'success',
+        type: 'unicast',
+        message: '랭킹 1등님 접속을 환영합니다.',
+        topRankScore: rankList[0].score,
+      };
+    }
+  }
 };
