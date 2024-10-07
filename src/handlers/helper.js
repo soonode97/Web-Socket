@@ -1,17 +1,18 @@
 // 어떠한 특정 기능을 하지 않지만 이벤트가 발생하면 필요한 도움을 주는 함수들
 
 import { CLIENT_VERSION } from '../constants.js';
-import { createStage, getStage, setStage } from '../models/stage.model.js';
+import { createStage } from '../models/stage.model.js';
 import { createItems } from '../models/item.model.js';
 import { getUser, removeUser } from '../models/user.model.js';
 import handlerMappings from './handlerMapping.js';
 import { createGameRecords, clearRecords } from '../models/record.model.js';
+import { initHighScore, welcomeTopPlayerMessage } from './rank.hanlder.js';
 
 // 유저가 접속을 해제했을 때 세팅할 함수
 export const handleDisconnect = (socket, uuid) => {
   clearRecords(uuid);
-  removeUser(socket.id);
   console.log(`User Disconnected: ${socket.id}`);
+  removeUser(socket.id);
   console.log(`Current users: ${getUser()}`);
 };
 
@@ -23,6 +24,8 @@ export const handleConnection = (socket, uuid) => {
   createGameRecords(uuid);
   createStage(uuid);
   createItems(uuid);
+  initHighScore();
+  welcomeTopPlayerMessage(uuid);
 
   socket.emit(`connection`, { uuid });
 };
