@@ -4,7 +4,7 @@
 import { CLIENT_VERSION } from './Constants.js';
 import my_key from './config.js';
 //
-const socket = io('http://localhost:3000', {
+const socket = io('http://3.84.229.150:3000', {
   query: {
     clientVersion: CLIENT_VERSION,
   },
