@@ -1,5 +1,7 @@
 # 웹소켓 게임만들기 (DINO)
 
+![alt text](image.png)
+
 ---
 
 ## 파일 구조
@@ -14,7 +16,7 @@
  ┃ ┃ ┣ 📜public.iml
  ┃ ┃ ┗ 📜workspace.xml
  ┃ ┣ 📂assets                  - 데이터 테이블에 관련된 파일 모임
- ┃ ┃ ┣ 📜item.json    
+ ┃ ┃ ┣ 📜item.json
  ┃ ┃ ┣ 📜item_unlock.json
  ┃ ┃ ┗ 📜stage.json
  ┃ ┣ 📂images
@@ -63,7 +65,7 @@
  ┃ ┃ ┣ 📜assets.js                - 에셋을 불러오는 파일
  ┃ ┃ ┗ 📜socket.js                - 소켓에 서버를 연결하고 핸들러를 등록하는 파일
  ┃ ┣ 📂models                  - 서버에서 사용할 데이터 모델 스크립트 모임
- ┃ ┃ ┣ 📜item.model.js               
+ ┃ ┃ ┣ 📜item.model.js
  ┃ ┃ ┣ 📜rank.model.js
  ┃ ┃ ┣ 📜record.model.js
  ┃ ┃ ┣ 📜stage.model.js
@@ -80,5 +82,30 @@
  ┣ 📜readme.md
  ┗ 📜yarn.lock
 ```
+
+---
+
+## 구현 기능
+
+### 필수
+
+- [x] 시간에 따른 점수 획득
+
+  - [x] 스테이지 구분
+  - [x] 스테이지에 따른 점수 획득 구분
+
+- [x] 아이템 획득
+  - [x] 아이템 획득 시 점수 획득
+  - [x] 스테이지 별 아이템 생성 구분
+  - [x] 아이템 별 획득 점수 구분
+
+### 도전
+
+- [x] Broadcast 기능 추가
+
+  - [x] 가장 높은 점수 전체 유저 갱신
+  - [x] 1등 유저 접속 시 환영 메시지 출력(서버)
+
+- [ ] Redis 연결
 
 ---
